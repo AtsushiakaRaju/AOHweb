@@ -19,7 +19,6 @@ window.addEventListener('scroll', () => {
 const showAlert = msg => alert(msg);
 
 // Game button interactions
-// Game button interactions
 document.querySelectorAll('.game-btn').forEach(btn => {
   // Only add the pop-up alert for buttons that have a "data-action"
   if (btn.dataset.action) {
@@ -46,4 +45,3 @@ if (ctaBtn) {
     showAlert('📞 Contact form would open here! For now, reach us at contact@altofhonor.com');
   });
 }
-
