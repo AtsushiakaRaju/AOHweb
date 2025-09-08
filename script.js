@@ -47,11 +47,3 @@ if (ctaBtn) {
   });
 }
 
-// Social links interaction
-document.querySelectorAll('.social-links a').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const platform = link.dataset.platform; // use data-platform attribute
-    showAlert(`🔗 This would open your ${platform} page! Connect your actual social media links here.`);
-  });
-});
