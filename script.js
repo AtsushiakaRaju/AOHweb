@@ -19,31 +19,26 @@ window.addEventListener('scroll', () => {
 const showAlert = msg => alert(msg);
 
 // Game button interactions
+// Game button interactions
 document.querySelectorAll('.game-btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.preventDefault();
-    const action = btn.dataset.action; // use data-action instead of textContent
-    switch (action) {
-      case 'play':
-        showAlert('🎮 Game launching in web player! (Connect to your actual game)');
-        break;
-      case 'download':
-        showAlert('⬇️ Download starting! (Trigger your game download)');
-        break;
-      case 'wishlist':
-        showAlert('❤️ Added to wishlist! You\'ll be notified when this game releases.');
-        break;
-      case 'updates':
-        showAlert('📧 You\'ll receive updates about this upcoming game!');
-        break;
-      case 'subscribe':
-        showAlert('📬 Newsletter subscription activated! Welcome to the AOH community!');
-        break;
-    }
-  });
+  // Only add the pop-up alert for buttons that have a "data-action"
+  if (btn.dataset.action) {
+    btn.addEventListener('click', e => {
+      e.preventDefault(); // Prevents the link from going to "#"
+      const action = btn.dataset.action;
+      switch (action) {
+        case 'wishlist':
+          showAlert('❤️ Added to wishlist! You\'ll be notified when this game releases.');
+          break;
+        case 'updates':
+          showAlert('📧 You\'ll receive updates about this upcoming game!');
+          break;
+      }
+    });
+  }
 });
 
-// CTA button interaction
+// CTA button interaction (Note: This won't find anything now as the investor button is gone, which is fine)
 const ctaBtn = document.querySelector('.cta-button[data-action="contact"]');
 if (ctaBtn) {
   ctaBtn.addEventListener('click', e => {
