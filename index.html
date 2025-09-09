@@ -1,113 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alt of Honor - Indie Game Studio</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Alt of Honor - Indie Game Studio</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="logo">AOH</div>
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#games">Games</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <nav>
+            <div class="logo">AOH</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main>
-    <section id="home" class="hero">
-      <div class="hero-content">
-        <h1>ALT OF HONOR</h1>
-        <p>Crafting Epic Gaming Experiences</p>
-        <a href="#games" class="cta-button">Explore Our Games</a>
-      </div>
-    </section>
-
-   <section id="games" class="games-section">
-      <div class="container">
-        <h2 class="section-title">Our Games</h2>
-        <div class="games-grid">
-          
-          <div class="game-card">
-            <h3>🎮 SkyFlutter Dash</h3>
-            <p>SkyFlutter Dash is an endless arcade game where you guide a bird through moving pipes and vibrant city skies. Flap your wings using spacebar, mouse click, or screen tap to stay airborne and avoid obstacles. Challenge yourself as the game speeds up and pipes appear more frequently the further you fly. Track your score, compete with friends, and enjoy smooth gameplay on desktop and mobile (landscape only). How far can you soar before crashing? Play now and aim for a new high score!</p>
-            <div class="game-buttons">
-              <a href="https://atsushiakaraju.github.io/SkyFlutter-Dash/" target="_blank" class="game-btn primary">Play Now</a>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>ALT OF HONOR</h1>
+                <p>Crafting Epic Gaming Experiences</p>
+                <a href="#games" class="cta-button">Explore Our Games</a>
             </div>
-          </div>
+        </section>
 
-          <div class="game-card">
-            <h3>⚔️ OG the nokia's snake</h3>
-            <p>Relive the magic of a timeless classic with this web-based Snake game. Guide your growing snake to eat the food and get bigger, all while avoiding the walls and your own ever-lengthening tail. Choose from Easy, Medium, or Hard difficulty modes to test your reflexes and precision. With simple controls and addictive gameplay, it's a perfect challenge for all ages. Climb the scoreboard and prove you're a true snake master!</p>
-            <div class="game-buttons">
-              <a href="https://atsushiakaraju.github.io/OGsnakeGame/" target="_blank" class="game-btn primary">Play Now</a>
+        <!-- Games Section -->
+        <section id="games" class="games-section">
+            <div class="container">
+                <h2 class="section-title">Our Games</h2>
+                <div class="games-grid">
+                  
+                    <!-- Game 1: SkyFlutter Dash -->
+                    <div class="game-card" id="skyflutter-dash">
+                        <h3><span role="img" aria-label="game controller">🎮</span> SkyFlutter Dash</h3>
+                        <p>SkyFlutter Dash is an endless arcade game where you guide a bird through moving pipes and vibrant city skies. Flap your wings using spacebar, mouse click, or screen tap to stay airborne and avoid obstacles. How far can you soar before crashing? Play now and aim for a new high score!</p>
+                        <div class="game-buttons">
+                            <a href="https://atsushiakaraju.github.io/SkyFlutter-Dash/" target="_blank" rel="noopener noreferrer" class="game-btn primary">Play Now</a>
+                        </div>
+                        <!-- RATING & COMMENT SECTION START -->
+                        <div class="community-section">
+                            <div class="rating-summary">
+                                <span class="avg-rating">...</span>
+                                <div class="stars-display"></div>
+                                <span class="review-count">(...)</span>
+                            </div>
+                            <div class="comments-list"></div>
+                            <form class="comment-form" data-game-id="skyflutter-dash">
+                                <h4>Leave a Review</h4>
+                                <div class="star-input">
+                                    <span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span data-value="4">☆</span><span data-value="5">☆</span>
+                                </div>
+                                <input type="hidden" class="rating-value" name="rating" value="0">
+                                <!-- REMOVED: Name input field -->
+                                <textarea name="comment" placeholder="Your review..." required></textarea>
+                                <button type="submit" class="game-btn">Submit</button>
+                            </form>
+                        </div>
+                        <!-- RATING & COMMENT SECTION END -->
+                    </div>
+
+                    <!-- Game 2: OG the nokia's snake -->
+                    <div class="game-card" id="og-snake">
+                        <h3><span role="img" aria-label="swords">⚔️</span> OG the nokia's snake</h3>
+                        <p>Relive the magic of a timeless classic. Guide your growing snake to eat the food and get bigger, all while avoiding the walls and your own ever-lengthening tail. Choose from Easy, Medium, or Hard difficulty modes to test your reflexes and precision. Climb the scoreboard and prove you're a true snake master!</p>
+                        <div class="game-buttons">
+                            <a href="https://atsushiakaraju.github.io/OGsnakeGame/" target="_blank" rel="noopener noreferrer" class="game-btn primary">Play Now</a>
+                        </div>
+                        <!-- RATING & COMMENT SECTION START -->
+                        <div class="community-section">
+                            <div class="rating-summary">
+                                <span class="avg-rating">...</span>
+                                <div class="stars-display"></div>
+                                <span class="review-count">(...)</span>
+                            </div>
+                            <div class="comments-list"></div>
+                            <form class="comment-form" data-game-id="og-snake">
+                                <h4>Leave a Review</h4>
+                                <div class="star-input">
+                                    <span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span data-value="4">☆</span><span data-value="5">☆</span>
+                                </div>
+                                <input type="hidden" class="rating-value" name="rating" value="0">
+                                <!-- REMOVED: Name input field -->
+                                <textarea name="comment" placeholder="Your review..." required></textarea>
+                                <button type="submit" class="game-btn">Submit</button>
+                            </form>
+                        </div>
+                        <!-- RATING & COMMENT SECTION END -->
+                    </div>
+                  
+                    <!-- Game 3: Coming Soon -->
+                    <div class="game-card">
+                        <h3><span role="img" aria-label="rocket">🚀</span> Coming Soon</h3>
+                        <p>Our next big project is in development! Stay tuned for updates on this exciting new adventure that will push the boundaries of indie gaming.</p>
+                        <div class="game-buttons">
+                            <a href="#" class="game-btn" data-action="wishlist">Wishlist</a>
+                            <a href="#" class="game-btn" data-action="updates">Get Updates</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
 
-          <div class="game-card">
-            <h3>🚀 Coming Soon</h3>
-            <p>Our next big project is in development! Stay tuned for updates on this exciting new adventure that will push the boundaries of indie gaming.</p>
-            <div class="game-buttons">
-              <a href="#" class="game-btn" data-action="wishlist">Wishlist</a>
-              <a href="#" class="game-btn" data-action="updates">Get Updates</a>
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2 class="section-title">Meet The Team</h2>
+                <div class="about-content">
+                    <div class="team-card">
+                        <h3>Atsushi</h3>
+                        <p class="role">Lead Game Developer</p>
+                        <p>The creative mastermind behind our games. Atsushi brings innovative gameplay mechanics and captivating storylines to life, ensuring every gaming experience is unforgettable.</p>
+                    </div>
+                    <div class="team-card">
+                        <h3>Electrocutioner</h3>
+                        <p class="role">Launch & Operations Specialist</p>
+                        <p>Handles game launches, testing, feedback collection, and asset creation. Electrocutioner ensures our games reach players in perfect condition and continue to evolve based on community input.</p>
+                    </div>
+                </div>
             </div>
-          </div>
-          
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Ready to collaborate or have questions?</p>
+                    <p><span role="img" aria-label="email">📧</span> altofhonor@gmail.com</p>
+                    <p><span role="img" aria-label="game controller">🎮</span> Join our gaming community</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/alt_of_honor?igsh=bHpmYzVsNTJ2Nzdp" title="Instagram" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="camera">📸</span></a>
+                        <a href="https://youtube.com/@alt_of_honor?si=6AzpV9vHPv3gbbQU" title="YouTube" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="tv">📺</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Alt of Honor. All rights reserved. | Crafted for gamers, by gamers.</p>
+            </div>
         </div>
-      </div>
-    </section>
+    </footer>
 
-    <section id="about" class="about-section">
-      <div class="container">
-        <h2 class="section-title">Meet The Team</h2>
-        <div class="about-content">
-          <div class="team-card">
-            <h3>Atsushi</h3>
-            <p class="role">Lead Game Developer</p>
-            <p>The creative mastermind behind our games. Atsushi brings innovative gameplay mechanics and captivating storylines to life, ensuring every gaming experience is unforgettable.</p>
-          </div>
-
-          <div class="team-card">
-            <h3>Electrocutioner</h3>
-            <p class="role">Launch & Operations Specialist</p>
-            <p>Handles game launches, testing, feedback collection, and asset creation. Electrocutioner ensures our games reach players in perfect condition and continue to evolve based on community input.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer id="contact">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Contact Us</h3>
-          <p>Ready to collaborate or have questions?</p>
-          <p>📧 altofhonor@gmail.com</p>
-          <p>🎮 Join our gaming community</p>
-        </div>
-
-        <div class="footer-section">
-          <h3>Follow Us</h3>
-          <div class="social-links">
-            <a href="https://www.instagram.com/alt_of_honor?igsh=bHpmYzVsNTJ2Nzdp" title="Instagram" target="_blank">📸</a>
-            <a href="https://youtube.com/@alt_of_honor?si=6AzpV9vHPv3gbbQU" title="YouTube" target="_blank">📺</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 Alt of Honor. All rights reserved. | Crafted for gamers, by gamers.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+    <!-- Firebase SDKs - These MUST be before your script.js file -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Your Custom JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
+
