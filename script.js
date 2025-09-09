@@ -27,22 +27,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FIREBASE & COMMUNITY FEATURES ---
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyD8QNCb0sDpNG7RjF7DkkqHCS41_T9CcuQ",
-        authDomain: "aoh-website-temp.firebaseapp.com",
-        projectId: "aoh-website-temp",
-        storageBucket: "aoh-website-temp.appspot.com",
-        messagingSenderId: "537972977277",
-        appId: "1:537972977277:web:f7d9f31b9b3d4cf6f7cb14"
-    };
+    // This async function will fetch the config and then initialize Firebase
+    async function initializeFirebase() {
+        try {
+            // Fetch the configuration from our Netlify serverless function
+            // This path is automatically handled by Netlify
+            const response = await fetch('/.netlify/functions/firebase-config');
+            if (!response.ok) {
+                throw new Error(`Failed to fetch Firebase config (${response.status})`);
+            }
+            const firebaseConfig = await response.json();
 
-    // Initialize Firebase, but only if the firebase object is available
-    if (typeof firebase !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+            // Initialize Firebase with the fetched config, only if it has the necessary keys
+            if (typeof firebase !== 'undefined' && firebaseConfig.apiKey) {
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.firestore();
 
-        // Function to load comments and calculate average rating for a specific game
+                // Once Firebase is initialized, set up all the features that depend on it
+                setupCommunityFeatures(db);
+            } else {
+                console.error("Firebase library is not loaded or the fetched config is missing an API key.");
+            }
+        } catch (error) {
+            console.error("Could not initialize Firebase:", error);
+            // Optionally, display an error message to the user on the page
+        }
+    }
+
+    function setupCommunityFeatures(db) {
+        // This function contains all the Firebase-dependent logic.
+        // It's only called after a successful connection is made.
+        
+        // Function to load comments and ratings for a specific game
         const loadCommentsAndRatings = (gameId) => {
             const gameCard = document.getElementById(gameId);
             if (!gameCard) return;
@@ -52,52 +68,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const starsDisplayEl = gameCard.querySelector('.stars-display');
             const reviewCountEl = gameCard.querySelector('.review-count');
             
-            try {
-                // Listen for real-time updates from Firestore for instant comment display
-                db.collection('comments').where('gameId', '==', gameId).orderBy('timestamp', 'desc')
-                  .onSnapshot(snapshot => {
-                    commentsList.innerHTML = ''; // Clear existing comments
-                    let totalRating = 0;
-                    let reviewCount = snapshot.size;
+            db.collection('comments').where('gameId', '==', gameId).orderBy('timestamp', 'desc')
+              .onSnapshot(snapshot => {
+                commentsList.innerHTML = '';
+                let totalRating = 0;
+                let reviewCount = snapshot.size;
 
-                    if (snapshot.empty) {
-                        commentsList.innerHTML = '<p>No reviews yet. Be the first!</p>';
-                    } else {
-                        snapshot.forEach(doc => {
-                            const comment = doc.data();
-                            totalRating += comment.rating;
-                            const commentEl = document.createElement('div');
-                            commentEl.className = 'comment-item';
-                            
-                            // Use textContent to prevent security issues (XSS attacks) from user input
-                            const userStrong = document.createElement('strong');
-                            userStrong.textContent = `${comment.username} rated it ${comment.rating}/5`;
-                            const commentP = document.createElement('p');
-                            commentP.textContent = comment.comment;
+                if (snapshot.empty) {
+                    commentsList.innerHTML = '<p>No reviews yet. Be the first!</p>';
+                } else {
+                    snapshot.forEach(doc => {
+                        const comment = doc.data();
+                        totalRating += comment.rating;
+                        const commentEl = document.createElement('div');
+                        commentEl.className = 'comment-item';
+                        
+                        const userStrong = document.createElement('strong');
+                        userStrong.textContent = `${comment.username} rated it ${comment.rating}/5`;
+                        const commentP = document.createElement('p');
+                        commentP.textContent = comment.comment;
 
-                            commentEl.appendChild(userStrong);
-                            commentEl.appendChild(commentP);
-                            commentsList.appendChild(commentEl);
-                        });
-                    }
+                        commentEl.appendChild(userStrong);
+                        commentEl.appendChild(commentP);
+                        commentsList.appendChild(commentEl);
+                    });
+                }
 
-                    // Calculate and display average rating
-                    if (reviewCount > 0) {
-                        const avgRating = (totalRating / reviewCount).toFixed(1);
-                        const roundedAvg = Math.round(avgRating);
-                        avgRatingEl.textContent = avgRating;
-                        starsDisplayEl.innerHTML = '★'.repeat(roundedAvg) + '☆'.repeat(5 - roundedAvg);
-                        reviewCountEl.textContent = `(${reviewCount} reviews)`;
-                    } else {
-                        avgRatingEl.textContent = 'N/A';
-                        starsDisplayEl.innerHTML = '☆☆☆☆☆';
-                        reviewCountEl.textContent = '(0 reviews)';
-                    }
-                });
-            } catch(error) {
-                console.error(`Error loading reviews for ${gameId}:`, error);
-                commentsList.innerHTML = '<p>Could not load reviews.</p>';
-            }
+                if (reviewCount > 0) {
+                    const avgRating = (totalRating / reviewCount).toFixed(1);
+                    const roundedAvg = Math.round(avgRating);
+                    avgRatingEl.textContent = avgRating;
+                    starsDisplayEl.innerHTML = '★'.repeat(roundedAvg) + '☆'.repeat(5 - roundedAvg);
+                    reviewCountEl.textContent = `(${reviewCount} reviews)`;
+                } else {
+                    avgRatingEl.textContent = 'N/A';
+                    starsDisplayEl.innerHTML = '☆☆☆☆☆';
+                    reviewCountEl.textContent = '(0 reviews)';
+                }
+              }, error => {
+                  console.error(`Error fetching reviews for ${gameId}: `, error);
+                  commentsList.innerHTML = '<p>Error loading reviews.</p>';
+              });
         };
 
         // Handle star rating input selection
@@ -122,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 const gameId = form.dataset.gameId;
                 const rating = parseInt(form.querySelector('.rating-value').value);
-                const username = form.querySelector('input[name="username"]').value;
                 const comment = form.querySelector('textarea[name="comment"]').value;
                 const submitButton = form.querySelector('button[type="submit"]');
 
@@ -135,17 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitButton.textContent = 'Submitting...';
 
                 try {
-                    // Add comment to Firestore database
                     await db.collection('comments').add({
                         gameId: gameId,
-                        username: username,
+                        username: "Anonymous",
                         comment: comment,
                         rating: rating,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    form.reset(); // Clear the form
-                    form.querySelector('.rating-value').value = '0'; // Reset hidden rating value
-                    form.querySelectorAll('.star-input span').forEach(s => s.classList.remove('selected')); // Reset stars
+                    form.reset();
+                    form.querySelector('.rating-value').value = '0';
+                    form.querySelectorAll('.star-input span').forEach(s => s.classList.remove('selected'));
                 } catch (error) {
                     console.error("Error adding review: ", error);
                     alert('Sorry, there was an error submitting your review.');
@@ -156,32 +165,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Initially load comments and ratings for all relevant games
+        // Initially load data for the games
         loadCommentsAndRatings('skyflutter-dash');
         loadCommentsAndRatings('og-snake');
-    } else {
-        console.error("Firebase is not loaded. Make sure the Firebase SDK scripts are included in your HTML before script.js.");
     }
+
+    // Start the entire Firebase process
+    initializeFirebase();
     
     // --- OTHER INTERACTIVE FEATURES (WISHLIST, ETC.) ---
-    document.querySelectorAll('.game-btn').forEach(btn => {
-      // Only add the pop-up alert for buttons that have a "data-action"
-      if (btn.dataset.action) {
-        btn.addEventListener('click', e => {
-          e.preventDefault(); // Prevents the link from going to "#"
-          const action = btn.dataset.action;
-          let message = '';
-          switch (action) {
-            case 'wishlist':
-              message = '❤️ Added to wishlist! You\'ll be notified when this game releases.';
-              break;
-            case 'updates':
-              message = '📧 You\'ll receive updates about this upcoming game!';
-              break;
-          }
-          if (message) alert(message);
-        });
-      }
+    document.querySelectorAll('.game-btn[data-action]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const action = btn.dataset.action;
+        let message = '';
+        switch (action) {
+          case 'wishlist':
+            message = '❤️ Added to wishlist! You\'ll be notified when this game releases.';
+            break;
+          case 'updates':
+            message = '📧 You\'ll receive updates about this upcoming game!';
+            break;
+        }
+        if (message) alert(message);
+      });
     });
 
 });
+
