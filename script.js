@@ -29,10 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // This code now runs instantly and doesn't wait for Firebase.
     document.querySelectorAll('.star-input').forEach(starContainer => {
         const stars = starContainer.querySelectorAll('span');
-        const ratingInput = starContainer.parentElement.querySelector('.rating-value');
+        // THE FIX IS ON THIS NEXT LINE: Using .closest() is more reliable.
+        const ratingInput = starContainer.closest('.comment-form').querySelector('.rating-value');
 
         stars.forEach(star => {
             star.addEventListener('click', () => {
+                // First, check if the ratingInput was actually found
+                if (!ratingInput) {
+                    console.error("Could not find the rating input field for this form.");
+                    return;
+                }
                 const ratingValue = star.dataset.value;
                 ratingInput.value = ratingValue;
                 stars.forEach(s => {
