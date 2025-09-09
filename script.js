@@ -1,15 +1,15 @@
 // Wait for the DOM to be fully loaded before running scripts
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- SMOOTH SCROLLING & HEADER EFFECT ---
-    
+    // --- UI INTERACTIONS THAT DON'T NEED FIREBASE (RUN IMMEDIATELY) ---
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-            if(targetElement){
+            if (targetElement) {
                 targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
@@ -19,46 +19,76 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     window.addEventListener('scroll', () => {
         if (header) {
-            header.style.background = window.scrollY > 50 
-                ? 'rgba(0,0,0,0.98)' 
+            header.style.background = window.scrollY > 50
+                ? 'rgba(0,0,0,0.98)'
                 : 'rgba(0,0,0,0.95)';
         }
     });
 
-    // --- FIREBASE & COMMUNITY FEATURES ---
+    // Handle star rating input selection - THIS IS THE FIX
+    // This code now runs instantly and doesn't wait for Firebase.
+    document.querySelectorAll('.star-input').forEach(starContainer => {
+        const stars = starContainer.querySelectorAll('span');
+        const ratingInput = starContainer.parentElement.querySelector('.rating-value');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const ratingValue = star.dataset.value;
+                ratingInput.value = ratingValue;
+                stars.forEach(s => {
+                    s.classList.toggle('selected', s.dataset.value <= ratingValue);
+                });
+            });
+        });
+    });
+    
+    // Handle Wishlist/Updates buttons
+    document.querySelectorAll('.game-btn[data-action]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const action = btn.dataset.action;
+        let message = '';
+        switch (action) {
+          case 'wishlist':
+            message = '❤️ Added to wishlist! You\'ll be notified when this game releases.';
+            break;
+          case 'updates':
+            message = '📧 You\'ll receive updates about this upcoming game!';
+            break;
+        }
+        if (message) alert(message);
+      });
+    });
+
+
+    // --- FIREBASE & DATA-DEPENDENT FEATURES ---
 
     // This async function will fetch the config and then initialize Firebase
     async function initializeFirebase() {
         try {
-            // Fetch the configuration from our Netlify serverless function
-            // This path is automatically handled by Netlify
             const response = await fetch('/.netlify/functions/firebase-config');
             if (!response.ok) {
                 throw new Error(`Failed to fetch Firebase config (${response.status})`);
             }
             const firebaseConfig = await response.json();
 
-            // Initialize Firebase with the fetched config, only if it has the necessary keys
             if (typeof firebase !== 'undefined' && firebaseConfig.apiKey) {
                 firebase.initializeApp(firebaseConfig);
                 const db = firebase.firestore();
-
-                // Once Firebase is initialized, set up all the features that depend on it
-                setupCommunityFeatures(db);
+                // Once Firebase is ready, set up the features that depend on it
+                setupDatabaseFeatures(db);
             } else {
-                console.error("Firebase library is not loaded or the fetched config is missing an API key.");
+                console.error("Firebase library not loaded or config missing API key.");
             }
         } catch (error) {
             console.error("Could not initialize Firebase:", error);
-            // Optionally, display an error message to the user on the page
         }
     }
 
-    function setupCommunityFeatures(db) {
-        // This function contains all the Firebase-dependent logic.
-        // It's only called after a successful connection is made.
+    // This function sets up all features that NEED a database connection
+    function setupDatabaseFeatures(db) {
         
-        // Function to load comments and ratings for a specific game
+        // Function to load comments and ratings from Firestore
         const loadCommentsAndRatings = (gameId) => {
             const gameCard = document.getElementById(gameId);
             if (!gameCard) return;
@@ -111,23 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
               });
         };
 
-        // Handle star rating input selection
-        document.querySelectorAll('.star-input').forEach(starContainer => {
-            const stars = starContainer.querySelectorAll('span');
-            const ratingInput = starContainer.parentElement.querySelector('.rating-value');
-            
-            stars.forEach(star => {
-                star.addEventListener('click', () => {
-                    const ratingValue = star.dataset.value;
-                    ratingInput.value = ratingValue;
-                    stars.forEach(s => {
-                        s.classList.toggle('selected', s.dataset.value <= ratingValue);
-                    });
-                });
-            });
-        });
-
-        // Handle comment form submission
+        // Handle comment form submission (needs the 'db' object)
         document.querySelectorAll('.comment-form').forEach(form => {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -170,26 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCommentsAndRatings('og-snake');
     }
 
-    // Start the entire Firebase process
+    // Start the Firebase initialization process
     initializeFirebase();
-    
-    // --- OTHER INTERACTIVE FEATURES (WISHLIST, ETC.) ---
-    document.querySelectorAll('.game-btn[data-action]').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        const action = btn.dataset.action;
-        let message = '';
-        switch (action) {
-          case 'wishlist':
-            message = '❤️ Added to wishlist! You\'ll be notified when this game releases.';
-            break;
-          case 'updates':
-            message = '📧 You\'ll receive updates about this upcoming game!';
-            break;
-        }
-        if (message) alert(message);
-      });
-    });
 
 });
 
