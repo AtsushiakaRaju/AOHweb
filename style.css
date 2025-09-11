@@ -1,3 +1,10 @@
+/* Make logo image round */
+.logo {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 /* Import fonts */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
 
@@ -26,12 +33,12 @@ nav {
     padding: 1rem 2rem;
 }
 .logo {
-    font-family: 'Orbitron', monospace;
-    font-size: 2rem; font-weight: 900;
-    background: linear-gradient(45deg, #dc2626, #ef4444, #dc2626);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 20px rgba(220,38,38,0.5);
+  height: 60px;
+  width: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Add more styles as needed */
+
 }
 .nav-links { display: flex; list-style: none; gap: 2rem; }
 .nav-links a {
