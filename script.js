@@ -48,23 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Handle Wishlist/Updates buttons
-    document.querySelectorAll('.game-btn[data-action]').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        const action = btn.dataset.action;
-        let message = '';
-        switch (action) {
-          case 'wishlist':
-            message = '❤️ Added to wishlist! You\'ll be notified when this game releases.';
-            break;
-          case 'updates':
-            message = '📧 You\'ll receive updates about this upcoming game!';
-            break;
-        }
-        if (message) alert(message);
-      });
-    });
+    // // Handle Wishlist/Updates buttons
+    // document.querySelectorAll('.game-btn[data-action]').forEach(btn => {
+    //   btn.addEventListener('click', e => {
+    //     e.preventDefault();
+    //     const action = btn.dataset.action;
+    //     let message = '';
+    //     switch (action) {
+    //       case 'wishlist':
+    //         message = '❤️ Added to wishlist! You\'ll be notified when this game releases.';
+    //         break;
+    //       case 'updates':
+    //         message = '📧 You\'ll receive updates about this upcoming game!';
+    //         break;
+    //     }
+    //     if (message) alert(message);
+    //   });
+    // });
 
 
     // --- FIREBASE & DATA-DEPENDENT FEATURES ---
@@ -188,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initially load data for the games
         loadCommentsAndRatings('skyflutter-dash');
         loadCommentsAndRatings('og-snake');
+        loadCommentsAndRatings('tic-tac');
     }
 
     // Start the Firebase initialization process

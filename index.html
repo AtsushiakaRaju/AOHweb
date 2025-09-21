@@ -113,18 +113,40 @@
                         <!-- RATING & COMMENT SECTION END -->
                     </div>
 
-                    <!-- Game 3: Coming Soon -->
-                    <div class="game-card">
-                        <h3><span role="img" aria-label="rocket">🚀</span> Coming Soon</h3>
-                        <p>Our next big project is in development! Stay tuned for updates on this exciting new adventure
-                            that will push the boundaries of indie gaming.</p>
+                    <!-- Game 3: Tic-Tac-Toe -->
+                    <div class="game-card" id="tic-tac">
+                        <h3><span role="img" aria-label="rocket">🚀</span>Tic-Tac-Toe</h3>
+                        <p>Step into the classic game of Tic-Tac-Toe with a clean, modern web design.
+                           Play Player vs Player on a single device or challenge a smart bot that plans its moves strategically.
+                           Smooth animations, responsive layout, and instant restart make it fun on any screen size.
+                           Our very first multiplayer title from AOH—simple, competitive, and perfect for quick matches!</p>
                         <div class="game-buttons">
-                            <a href="#" class="game-btn" data-action="wishlist">Wishlist</a>
-                            <a href="#" class="game-btn" data-action="updates">Get Updates</a>
+                            <a href="https://atsushiakaraju.github.io/Tic-Tac-Toe/" target="_blank"
+                                rel="noopener noreferrer" class="game-btn primary">Play Now</a>
                         </div>
+                        <!-- RATING & COMMENT SECTION START -->
+                        <div class="community-section">
+                            <div class="rating-summary">
+                                <span class="avg-rating">...</span>
+                                <div class="stars-display"></div>
+                                <span class="review-count">(...)</span>
+                            </div>
+                            <div class="comments-list"></div>
+                            <form class="comment-form" data-game-id="tic-tac">
+                                <h4>Leave a Review</h4>
+                                <div class="star-input">
+                                    <span data-value="1">☆</span><span data-value="2">☆</span><span
+                                        data-value="3">☆</span><span data-value="4">☆</span><span
+                                        data-value="5">☆</span>
+                                </div>
+                                <input type="hidden" class="rating-value" name="rating" value="0">
+                                <!-- REMOVED: Name input field -->
+                                <textarea name="comment" placeholder="Your review..." required></textarea>
+                                <button type="submit" class="game-btn">Submit</button>
+                            </form>
+                        </div>
+                        <!-- RATING & COMMENT SECTION END -->
                     </div>
-                </div>
-            </div>
         </section>
 
         <!-- About Section -->
